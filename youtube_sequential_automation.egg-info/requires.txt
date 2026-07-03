@@ -1,0 +1,9 @@
+google-api-python-client>=2.136.0
+google-auth>=2.32.0
+google-auth-oauthlib>=1.2.1
+psycopg[binary]>=3.2.1
+PyYAML>=6.0.2
+yt-dlp>=2024.7.9
+
+[dev]
+pytest>=8.2.0

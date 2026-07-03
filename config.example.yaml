@@ -1,0 +1,74 @@
+database:
+  dsn: "postgresql://neondb_owner:password@ep-example.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
+
+retry:
+  max_attempts: 6
+  initial_delay_seconds: 5
+  backoff_multiplier: 2
+  max_delay_seconds: 300
+
+discovery:
+  latest_only: true
+  max_candidates: 10
+
+paths:
+  downloads_dir: "./downloads"
+  failed_dir: "./failed"
+  logs_dir: "./logs"
+
+upload_defaults:
+  privacy_status: "private"
+  category_id: "22"
+  tags:
+    - "automation"
+    - "reupload"
+  title_prefix: ""
+  description_prefix: ""
+  description_suffix: ""
+  chunk_size_bytes: 8388608
+
+channel_pairs:
+  - name: "pair-01"
+    enabled: true
+    source_url: "https://www.youtube.com/@dafsdgfsd/shorts"
+    source_channel_label: "dafsdgfsd"
+    target_channel_name: "Example Target"
+    target_client_secret_json: "./credentials/pair-01-client-secret.json"
+    target_oauth_token_json: "./tokens/pair-01-token.json"
+    title_prefix: "[Mirror] "
+    description_prefix: "Reuploaded automatically.\n\n"
+    description_suffix: "\n\n#automation"
+    tags:
+      - "example"
+
+  - name: "pair-02"
+    enabled: false
+    source_url: "https://www.youtube.com/@source-2/videos"
+    source_channel_label: "Source 2"
+    target_channel_name: "Target 2"
+    target_client_secret_json: "./credentials/pair-02-client-secret.json"
+    target_oauth_token_json: "./tokens/pair-02-token.json"
+
+  - name: "pair-03"
+    enabled: false
+    source_url: "https://www.youtube.com/@source-3/videos"
+    source_channel_label: "Source 3"
+    target_channel_name: "Target 3"
+    target_client_secret_json: "./credentials/pair-03-client-secret.json"
+    target_oauth_token_json: "./tokens/pair-03-token.json"
+
+  - name: "pair-04"
+    enabled: false
+    source_url: "https://www.youtube.com/@source-4/videos"
+    source_channel_label: "Source 4"
+    target_channel_name: "Target 4"
+    target_client_secret_json: "./credentials/pair-04-client-secret.json"
+    target_oauth_token_json: "./tokens/pair-04-token.json"
+
+  - name: "pair-05"
+    enabled: false
+    source_url: "https://www.youtube.com/@source-5/videos"
+    source_channel_label: "Source 5"
+    target_channel_name: "Target 5"
+    target_client_secret_json: "./credentials/pair-05-client-secret.json"
+    target_oauth_token_json: "./tokens/pair-05-token.json"
