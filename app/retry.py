@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass
-from typing import Callable, TypeVar
+from typing import Callable, Generic, TypeVar
 
 from app.exceptions import NonRetriableError, RetryExhaustedError
 
@@ -18,7 +18,7 @@ class RetryConfig:
 
 
 @dataclass(slots=True)
-class RetryOutcome[T]:
+class RetryOutcome(Generic[T]):
     value: T
     attempts: int
 
