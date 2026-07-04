@@ -37,7 +37,7 @@ channel_pairs:
     enabled: true
     source_url: "https://www.youtube.com/@dafsdgfsd/shorts"
     source_channel_label: "dafsdgfsd"
-    target_channel_name: "Example Target"
+    target_channel_name: "@FactVibeDaily247"
     target_client_secret_json: "./credentials/pair-01-client-secret.json"
     target_oauth_token_json: "./tokens/pair-01-token.json"
     title_prefix: ""

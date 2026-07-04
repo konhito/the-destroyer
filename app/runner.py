@@ -127,6 +127,13 @@ class VideoAutomationRunner:
             self._record_failure(channel, video, download_result, download_attempts, upload_attempts, str(exc))
         except RetryExhaustedError as exc:
             download_attempts = max(download_attempts, exc.attempts)
+            stage = "download" if download_result is None else "upload"
+            self.logger.exception(
+                "%s failed after retries source_video_id=%s target=%s",
+                stage.capitalize(),
+                video.video_id,
+                channel.target_channel_name,
+            )
             self._record_failure(
                 channel,
                 video,

@@ -76,6 +76,11 @@ class FailingUploader:
         raise RuntimeError("upload failed")
 
 
+class FailingDownloader:
+    def download(self, channel, video: VideoCandidate) -> DownloadResult:
+        raise RuntimeError("download traceback marker")
+
+
 class TrackingFileManager(FileManager):
     def __init__(self, failed_dir: Path, calls: list[str]) -> None:
         super().__init__(failed_dir)
@@ -169,3 +174,31 @@ def test_runner_moves_failed_file_after_retries_exhausted(tmp_path: Path) -> Non
     assert calls == ["discover", "download", "upload", "upload", "move-failed"]
     assert repository.records[0]["result"].status == "failed"
     assert Path(repository.records[0]["result"].local_file_path).exists()
+
+
+def test_runner_logs_download_traceback_when_retries_are_exhausted(
+    tmp_path: Path, caplog
+) -> None:
+    config = make_config(tmp_path)
+    video = VideoCandidate(
+        video_id="abc123",
+        title="Video Title",
+        webpage_url="https://www.youtube.com/watch?v=abc123",
+        channel_name="Source",
+    )
+    runner = VideoAutomationRunner(
+        config=config,
+        repository=FakeRepository(),
+        discovery=FakeDiscovery([], [video]),
+        downloader=FailingDownloader(),
+        uploader=FakeUploader([]),
+        file_manager=TrackingFileManager(tmp_path / "failed", []),
+        logger=logging.getLogger("test-runner-download-traceback"),
+    )
+
+    with caplog.at_level(logging.ERROR, logger="test-runner-download-traceback"):
+        runner.run()
+
+    assert "Download failed after retries" in caplog.text
+    assert "download traceback marker" in caplog.text
+    assert "Traceback (most recent call last)" in caplog.text
