@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 
 from app.config import load_config
@@ -25,7 +26,14 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def sanitize_child_process_environment() -> None:
+    # PM2 exposes its Node IPC descriptor to managed processes. yt-dlp's
+    # JavaScript runtimes inherit it and try to use an invalid IPC channel.
+    os.environ.pop("NODE_CHANNEL_FD", None)
+
+
 def main() -> int:
+    sanitize_child_process_environment()
     args = build_parser().parse_args()
     config = load_config(Path(args.config))
     logger = configure_logging(config.paths.logs_dir)
