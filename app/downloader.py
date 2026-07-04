@@ -12,9 +12,20 @@ from app.models import DownloadResult, VideoCandidate
 
 
 class YtDlpDownloader:
-    def __init__(self, downloads_dir: Path, logger: logging.Logger) -> None:
+    def __init__(
+        self,
+        downloads_dir: Path,
+        logger: logging.Logger,
+        *,
+        cookies_file: Path | None = None,
+        js_runtime: str | None = None,
+        remote_components: str | None = None,
+    ) -> None:
         self._downloads_dir = downloads_dir
         self._logger = logger
+        self._cookies_file = cookies_file
+        self._js_runtime = js_runtime
+        self._remote_components = remote_components
         self._downloads_dir.mkdir(parents=True, exist_ok=True)
 
     def download(self, channel: ChannelPairConfig, video: VideoCandidate) -> DownloadResult:
@@ -26,6 +37,12 @@ class YtDlpDownloader:
             "restrictfilenames": True,
             "merge_output_format": "mp4",
         }
+        if self._cookies_file:
+            opts["cookiefile"] = str(self._cookies_file)
+        if self._js_runtime:
+            opts["js_runtimes"] = {self._js_runtime: None}
+        if self._remote_components:
+            opts["remote_components"] = self._remote_components
         try:
             with YoutubeDL(opts) as ydl:
                 metadata = ydl.extract_info(video.webpage_url, download=True)

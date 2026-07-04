@@ -14,7 +14,7 @@ dependencies = [
   "google-auth-oauthlib>=1.2.1",
   "psycopg[binary]>=3.2.1",
   "PyYAML>=6.0.2",
-  "yt-dlp>=2024.7.9",
+  "yt-dlp[default]>=2024.7.9",
 ]
 
 [project.optional-dependencies]

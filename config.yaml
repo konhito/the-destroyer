@@ -11,6 +11,11 @@ discovery:
   latest_only: true
   max_candidates: 10
 
+ytdlp:
+  cookies_file: "./cookies.txt"
+  js_runtime: "node"
+  remote_components: "ejs:github"
+
 paths:
   downloads_dir: "./downloads"
   failed_dir: "./failed"

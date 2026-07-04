@@ -36,8 +36,20 @@ def main() -> int:
     runner = VideoAutomationRunner(
         config=config,
         repository=PostgresVideoRepository(config.database, logger),
-        discovery=YtDlpDiscoveryClient(config.discovery, logger),
-        downloader=YtDlpDownloader(config.paths.downloads_dir, logger),
+        discovery=YtDlpDiscoveryClient(
+            config.discovery,
+            logger,
+            cookies_file=config.ytdlp.cookies_file,
+            js_runtime=config.ytdlp.js_runtime,
+            remote_components=config.ytdlp.remote_components,
+        ),
+        downloader=YtDlpDownloader(
+            config.paths.downloads_dir,
+            logger,
+            cookies_file=config.ytdlp.cookies_file,
+            js_runtime=config.ytdlp.js_runtime,
+            remote_components=config.ytdlp.remote_components,
+        ),
         uploader=YouTubeUploadClient(config.upload_defaults, logger),
         file_manager=FileManager(config.paths.failed_dir),
         logger=logger,

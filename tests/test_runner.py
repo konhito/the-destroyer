@@ -11,6 +11,7 @@ from app.config import (
     PathsConfig,
     RetryConfig as AppRetryConfig,
     UploadDefaultsConfig,
+    YtDlpConfig,
 )
 from app.exceptions import RetryExhaustedError
 from app.files import FileManager
@@ -99,6 +100,7 @@ def make_config(tmp_path: Path) -> AppConfig:
             failed_dir=tmp_path / "failed",
             logs_dir=tmp_path / "logs",
         ),
+        ytdlp=YtDlpConfig(),
         upload_defaults=UploadDefaultsConfig(),
         channel_pairs=[
             ChannelPairConfig(

@@ -34,6 +34,13 @@ class PathsConfig:
 
 
 @dataclass(slots=True)
+class YtDlpConfig:
+    cookies_file: Path | None = None
+    js_runtime: str | None = None
+    remote_components: str | None = None
+
+
+@dataclass(slots=True)
 class UploadDefaultsConfig:
     privacy_status: str = "private"
     category_id: str = "22"
@@ -65,6 +72,7 @@ class AppConfig:
     retry: RetryConfig
     discovery: DiscoveryConfig
     paths: PathsConfig
+    ytdlp: YtDlpConfig
     upload_defaults: UploadDefaultsConfig
     channel_pairs: list[ChannelPairConfig]
 
@@ -90,6 +98,7 @@ def load_config(path: str | Path) -> AppConfig:
     retry_raw = raw.get("retry", {})
     discovery_raw = raw.get("discovery", {})
     paths_raw = _require(raw, "paths")
+    ytdlp_raw = raw.get("ytdlp", {})
     upload_raw = raw.get("upload_defaults", {})
     channel_pairs_raw = _require(raw, "channel_pairs")
 
@@ -109,6 +118,13 @@ def load_config(path: str | Path) -> AppConfig:
             downloads_dir=_to_path(_require(paths_raw, "downloads_dir")),
             failed_dir=_to_path(_require(paths_raw, "failed_dir")),
             logs_dir=_to_path(_require(paths_raw, "logs_dir")),
+        ),
+        ytdlp=YtDlpConfig(
+            cookies_file=_to_path(ytdlp_raw["cookies_file"]) if ytdlp_raw.get("cookies_file") else None,
+            js_runtime=str(ytdlp_raw["js_runtime"]) if ytdlp_raw.get("js_runtime") else None,
+            remote_components=(
+                str(ytdlp_raw["remote_components"]) if ytdlp_raw.get("remote_components") else None
+            ),
         ),
         upload_defaults=UploadDefaultsConfig(
             privacy_status=str(upload_raw.get("privacy_status", "private")),

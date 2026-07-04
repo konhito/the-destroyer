@@ -76,6 +76,9 @@ Important fields:
 
 - `database.dsn` — NeonDB connection string
 - `discovery.latest_only` — keep `true` for initial rollout
+- `ytdlp.cookies_file` — Netscape-format YouTube cookies file
+- `ytdlp.js_runtime` — set to `node`
+- `ytdlp.remote_components` — set to `ejs:github`
 - `channel_pairs[].enabled` — enable only the pairs you want active
 - `channel_pairs[].source_url` — current initial value is `https://www.youtube.com/@dafsdgfsd/shorts`
 - `channel_pairs[].target_client_secret_json` — Google OAuth client secret path
@@ -180,8 +183,24 @@ python -m pip install -e ".[dev]"
 
 - edit `config.yaml`
 - set your NeonDB DSN
+- place a valid Netscape-format YouTube cookie file at `cookies.txt`
 - place OAuth client JSON files in `credentials/`
 - generate token JSON files in `tokens/`
+
+### 5a. yt-dlp YouTube challenge prerequisites
+
+The downloader currently expects:
+
+- `yt-dlp[default]`
+- Node.js
+- `remote_components: ejs:github`
+- a valid YouTube `cookies.txt`
+
+Manual raw yt-dlp check:
+
+```bash
+python -m yt_dlp --js-runtimes node --remote-components ejs:github --cookies ./cookies.txt "https://www.youtube.com/watch?v=Up12A2K4EIQ"
+```
 
 ### 6. Apply database schema
 
