@@ -46,6 +46,10 @@ class YtDlpDownloader:
         try:
             with YoutubeDL(opts) as ydl:
                 metadata = ydl.extract_info(video.webpage_url, download=True)
+                if not metadata:
+                    raise NonRetriableError(
+                        f"yt-dlp returned no metadata for source_video_id={video.video_id}"
+                    )
                 file_path = Path(ydl.prepare_filename(metadata))
                 requested_downloads = metadata.get("requested_downloads") or []
                 if requested_downloads and requested_downloads[0].get("filepath"):
