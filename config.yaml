@@ -22,7 +22,7 @@ paths:
   logs_dir: "./logs"
 
 upload_defaults:
-  privacy_status: "private"
+  privacy_status: "public"
   category_id: "22"
   tags:
     - "automation"

@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "youtube-sequential-automation",
       cwd: __dirname,
-      script: "python3.11",
+      script: "./.venv/bin/python",
       args: "-m app.main --config config.yaml",
       interpreter: "none",
       autorestart: false,
