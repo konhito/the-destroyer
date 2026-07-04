@@ -13,8 +13,8 @@ discovery:
 
 ytdlp:
   cookies_file: "./cookies.txt"
-  js_runtime: "node"
-  remote_components: "ejs:github"
+  js_runtime: "deno"
+  remote_components: "ejs:npm"
 
 paths:
   downloads_dir: "./downloads"
