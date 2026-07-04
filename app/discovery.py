@@ -40,7 +40,7 @@ class YtDlpDiscoveryClient:
         if self._js_runtime:
             opts["js_runtimes"] = {self._js_runtime: None}
         if self._remote_components:
-            opts["remote_components"] = self._remote_components
+            opts["remote_components"] = [self._remote_components]
         try:
             with YoutubeDL(opts) as ydl:
                 info = ydl.extract_info(channel.source_url, download=False)

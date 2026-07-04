@@ -55,7 +55,7 @@ def test_discovery_passes_cookie_and_js_options(monkeypatch) -> None:
     assert RecordingYoutubeDL.last_opts is not None
     assert RecordingYoutubeDL.last_opts["cookiefile"] == "cookies.txt"
     assert RecordingYoutubeDL.last_opts["js_runtimes"] == {"node": None}
-    assert RecordingYoutubeDL.last_opts["remote_components"] == "ejs:github"
+    assert RecordingYoutubeDL.last_opts["remote_components"] == ["ejs:github"]
 
 
 def test_downloader_passes_cookie_and_js_options(monkeypatch, tmp_path: Path) -> None:
@@ -88,4 +88,4 @@ def test_downloader_passes_cookie_and_js_options(monkeypatch, tmp_path: Path) ->
     assert RecordingYoutubeDL.last_opts is not None
     assert RecordingYoutubeDL.last_opts["cookiefile"] == "cookies.txt"
     assert RecordingYoutubeDL.last_opts["js_runtimes"] == {"node": None}
-    assert RecordingYoutubeDL.last_opts["remote_components"] == "ejs:github"
+    assert RecordingYoutubeDL.last_opts["remote_components"] == ["ejs:github"]
