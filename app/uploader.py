@@ -28,7 +28,11 @@ def _is_retriable_upload_error(exc: HttpError) -> bool:
     try:
         payload = json.loads(exc.content.decode("utf-8"))
         reasons = payload.get("error", {}).get("errors", [])
-        message = " ".join(str(item.get("reason", "")) for item in reasons)
+        message = " ".join(
+            str(item.get("reason", ""))
+            for item in reasons
+            if isinstance(item, dict)
+        )
     except Exception:
         message = str(exc)
     return any(token in message for token in ("rateLimitExceeded", "userRateLimitExceeded", "quotaExceeded", "backendError"))
