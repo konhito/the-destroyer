@@ -38,6 +38,13 @@ class NoneMetadataYoutubeDL(RecordingYoutubeDL):
         return super().extract_info(url, download=download)
 
 
+class NoneRequestedDownloadYoutubeDL(RecordingYoutubeDL):
+    def extract_info(self, url: str, download: bool = False) -> dict:
+        if download:
+            return {"id": "abc123", "ext": "mp4", "requested_downloads": [None]}
+        return super().extract_info(url, download=download)
+
+
 def test_discovery_passes_cookie_and_js_options(monkeypatch) -> None:
     monkeypatch.setattr("app.discovery.YoutubeDL", RecordingYoutubeDL)
     client = YtDlpDiscoveryClient(
@@ -130,3 +137,33 @@ def test_downloader_raises_non_retriable_when_ytdlp_returns_none(monkeypatch, tm
         assert "returned no metadata" in str(exc).lower()
     else:
         raise AssertionError("Expected NonRetriableError")
+
+
+def test_downloader_handles_none_requested_download_entry(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.setattr("app.downloader.YoutubeDL", NoneRequestedDownloadYoutubeDL)
+    downloader = YtDlpDownloader(
+        tmp_path / "downloads",
+        logging.getLogger("test-downloader-none-requested-download"),
+        cookies_file=Path("cookies.txt"),
+        js_runtime="node",
+        remote_components="ejs:github",
+    )
+
+    channel = ChannelPairConfig(
+        name="pair-01",
+        enabled=True,
+        source_url="https://www.youtube.com/@source/shorts",
+        source_channel_label="Source",
+        target_channel_name="Target",
+        target_client_secret_json=Path("client.json"),
+        target_oauth_token_json=Path("token.json"),
+    )
+    video = VideoCandidate(
+        video_id="abc123",
+        title="Example",
+        webpage_url="https://www.youtube.com/watch?v=abc123",
+    )
+
+    result = downloader.download(channel, video)
+
+    assert result.file_path == Path("video.mp4")

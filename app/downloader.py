@@ -52,8 +52,9 @@ class YtDlpDownloader:
                     )
                 file_path = Path(ydl.prepare_filename(metadata))
                 requested_downloads = metadata.get("requested_downloads") or []
-                if requested_downloads and requested_downloads[0].get("filepath"):
-                    file_path = Path(requested_downloads[0]["filepath"])
+                first_requested_download = requested_downloads[0] if requested_downloads else None
+                if isinstance(first_requested_download, dict) and first_requested_download.get("filepath"):
+                    file_path = Path(first_requested_download["filepath"])
                 if metadata.get("ext") and file_path.suffix.lower() != f".{metadata['ext'].lower()}":
                     candidate = file_path.with_suffix(f".{metadata['ext']}")
                     if candidate.exists():
