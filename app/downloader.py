@@ -40,7 +40,7 @@ class YtDlpDownloader:
         if self._cookies_file:
             opts["cookiefile"] = str(self._cookies_file)
         if self._js_runtime:
-            opts["js_runtimes"] = {self._js_runtime: None}
+            opts["js_runtimes"] = {self._js_runtime: {}}
         if self._remote_components:
             opts["remote_components"] = [self._remote_components]
         try:
